@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import * as firebase from 'firebase';
 import { Camera } from 'expo-camera';
 
 const Screen = () => {
+  const cameraRef = useRef<Camera | null>();
+
+  const [imageUri, setImageURI] = useState<string | undefined>();
+
   const storeRandom = async () => {
     await firebase
       .database()
@@ -13,7 +17,7 @@ const Screen = () => {
       });
   };
 
-  const [hasPermission, setHasPermission] = useState<Boolean | undefined>();
+  const [hasPermission, setHasPermission] = useState<Boolean>();
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
@@ -30,10 +34,25 @@ const Screen = () => {
     return <Text>No access to camera</Text>;
   }
 
+  const takePicture = async () => {
+    if (cameraRef.current) {
+      let photo = await cameraRef.current.takePictureAsync({ quality: 0.5 });
+      setImageURI(photo.uri);
+      console.log(photo);
+    }
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Camera style={styles.camera} type={type} />
-      <View
+      <Camera
+        ref={(camera) => {
+          cameraRef.current = camera;
+        }}
+        style={styles.camera}
+        type={type}
+      />
+      <TouchableOpacity
+        onPress={() => takePicture()}
         style={{
           width: 100,
           height: 100,
@@ -43,7 +62,21 @@ const Screen = () => {
           borderRadius: 50,
           opacity: 0.5,
         }}
-      ></View>
+      />
+      <View
+        style={{
+          position: 'absolute',
+          width: 100,
+          height: 200,
+          top: 0,
+          right: 0,
+          backgroundColor: 'white',
+        }}
+      >
+        {imageUri && (
+          <Image source={{ uri: imageUri }} style={{ width: '100%', height: '100%' }} />
+        )}
+      </View>
     </View>
   );
 };
