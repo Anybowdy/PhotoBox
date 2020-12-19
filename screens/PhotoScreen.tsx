@@ -22,10 +22,16 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
   const onSend = async () => {
     setLoading(true);
     try {
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
+      const fetchedImage = await fetch(imageUri);
+      const blob = await fetchedImage.blob();
 
-      let res = await firebase.storage().ref('test').put(blob);
+      const imageName = imageUri.substring(imageUri.lastIndexOf('/') + 1);
+
+      await firebase
+        .storage()
+        .ref()
+        .child('images/' + imageName)
+        .put(blob);
     } catch (e) {
       console.log('Error while uploading the image: ' + e);
     }

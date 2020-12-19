@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Screen from './screens/Screen';
 import LoginScreen from './screens/LoginScreen';
+import ContentScreen from './screens/ContentScreen';
 import * as firebase from 'firebase';
 import Swiper from 'react-native-swiper';
 
@@ -37,8 +38,8 @@ export default function App() {
   }
 
   return (
-    <Swiper index={1} showsPagination={false}>
-      <View />
+    <Swiper index={1} showsPagination={false} loop={false}>
+      <ContentScreen />
       <Screen />
     </Swiper>
   );
