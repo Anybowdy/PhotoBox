@@ -41,7 +41,7 @@ export default function App() {
   return (
     <Swiper index={1} showsPagination={false} loop={false} scrollEnabled={scrollEnabled}>
       <ContentScreen />
-      <Screen />
+      <Screen setScrollEnabled={setScrollEnabled} />
     </Swiper>
   );
 }

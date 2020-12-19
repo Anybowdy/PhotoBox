@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import * as firebase from 'firebase';
 import { Camera } from 'expo-camera';
@@ -6,11 +6,17 @@ import PhotoScreen from './PhotoScreen';
 
 import Swiper from 'react-native-swiper';
 
-const Screen = () => {
+interface Props {
+  setScrollEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Screen: FC<Props> = ({ setScrollEnabled }) => {
   const cameraRef = useRef<Camera | null>();
-  const [imageUri, setImageURI] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<Boolean>();
   const [type, setType] = useState(Camera.Constants.Type.back);
+
+  const [imageUri, setImageURI] = useState<string | null>(null);
+  const [videoUri, setVideoURI] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -28,14 +34,14 @@ const Screen = () => {
 
   const onLongPress = async () => {
     if (cameraRef.current) {
-      console.log('pressed');
+      setScrollEnabled(false);
       let video = await cameraRef.current.recordAsync();
       console.log(video);
     }
   };
 
   const onPressOut = () => {
-    console.log('pressed out');
+    setScrollEnabled(true);
     cameraRef.current?.stopRecording();
   };
 
