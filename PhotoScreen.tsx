@@ -25,7 +25,7 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
       const response = await fetch(imageUri);
       const blob = await response.blob();
 
-      let res = await firebase.storage().ref('image').put(blob);
+      let res = await firebase.storage().ref('test').put(blob);
     } catch (e) {
       console.log('Error while uploading the image: ' + e);
     }

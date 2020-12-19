@@ -36,7 +36,7 @@ const Screen = () => {
 
   const takePicture = async () => {
     if (cameraRef.current) {
-      let photo = await cameraRef.current.takePictureAsync({ quality: 1 });
+      let photo = await cameraRef.current.takePictureAsync({ quality: 0.2 });
       setImageURI(photo.uri);
     }
   };
