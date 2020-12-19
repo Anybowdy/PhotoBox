@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Screen from './Screen';
-import LoginScreen from './LoginScreen';
+import Screen from './screens/Screen';
+import LoginScreen from './screens/LoginScreen';
 import * as firebase from 'firebase';
 import Swiper from 'react-native-swiper';
 
