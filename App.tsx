@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Screen from './Screen';
 import LoginScreen from './LoginScreen';
 import * as firebase from 'firebase';
+import Swiper from 'react-native-swiper';
 
 import { initializeFirebase } from './FirebaseConfig';
 
@@ -35,7 +36,12 @@ export default function App() {
     return <LoginScreen />;
   }
 
-  return <Screen />;
+  return (
+    <Swiper index={1} showsPagination={false}>
+      <View />
+      <Screen />
+    </Swiper>
+  );
 }
 
 const styles = StyleSheet.create({
