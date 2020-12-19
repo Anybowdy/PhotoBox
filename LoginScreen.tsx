@@ -9,8 +9,6 @@ const LoginScreen = () => {
     password: '',
   });
 
-  const [authenticated, setAuthenticated] = useState(false);
-
   const onChangeText = (field: string, newValue: string) => {
     setCreds({ ...creds, [field]: newValue });
   };
@@ -24,27 +22,6 @@ const LoginScreen = () => {
       console.log('Error while login: ' + e);
     }
   };
-
-  const listenToAuthChanges = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        var uid = user.uid;
-        console.log(user);
-        setAuthenticated(true);
-      } else {
-        // User is signed out
-        // ...
-      }
-    });
-  };
-
-  useEffect(() => {
-    listenToAuthChanges();
-  }, []);
-
-  if (authenticated) {
-    return <Screen />;
-  }
 
   return (
     <View
