@@ -4,19 +4,11 @@ import * as firebase from 'firebase';
 import { Camera } from 'expo-camera';
 import PhotoScreen from './PhotoScreen';
 
+import Swiper from 'react-native-swiper';
+
 const Screen = () => {
   const cameraRef = useRef<Camera | null>();
   const [imageUri, setImageURI] = useState<string | null>(null);
-
-  const storeRandom = async () => {
-    await firebase
-      .database()
-      .ref('test/')
-      .set({
-        lol: 'zsh la mif' + Math.random() * 1489192,
-      });
-  };
-
   const [hasPermission, setHasPermission] = useState<Boolean>();
   const [type, setType] = useState(Camera.Constants.Type.back);
 
@@ -27,19 +19,19 @@ const Screen = () => {
     })();
   }, []);
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-
   const takePicture = async () => {
     if (cameraRef.current) {
       let photo = await cameraRef.current.takePictureAsync({ quality: 0.2 });
       setImageURI(photo.uri);
     }
   };
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
 
   return (
     <>
