@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import * as firebase from 'firebase';
 import { Camera } from 'expo-camera';
+import PhotoScreen from './PhotoScreen';
 
 const Screen = () => {
   const cameraRef = useRef<Camera | null>();
 
-  const [imageUri, setImageURI] = useState<string | undefined>();
+  const [imageUri, setImageURI] = useState<string | null>(null);
 
   const storeRandom = async () => {
     await firebase
@@ -36,48 +37,37 @@ const Screen = () => {
 
   const takePicture = async () => {
     if (cameraRef.current) {
-      let photo = await cameraRef.current.takePictureAsync({ quality: 0.5 });
+      let photo = await cameraRef.current.takePictureAsync({ quality: 1 });
       setImageURI(photo.uri);
       console.log(photo);
     }
   };
 
+  // if (imageUri) {
+  //   return <PhotoScreen imageUri={imageUri} setImageUri={setImageURI} />;
+  // }
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Camera
-        ref={(camera) => {
-          cameraRef.current = camera;
-        }}
-        style={styles.camera}
-        type={type}
-      />
-      <TouchableOpacity
-        onPress={() => takePicture()}
-        style={{
-          width: 100,
-          height: 100,
-          backgroundColor: 'gray',
-          position: 'absolute',
-          bottom: 80,
-          borderRadius: 50,
-          opacity: 0.5,
-        }}
-      />
-      <View
-        style={{
-          position: 'absolute',
-          width: 100,
-          height: 200,
-          top: 0,
-          right: 0,
-          backgroundColor: 'white',
-        }}
-      >
-        {imageUri && (
-          <Image source={{ uri: imageUri }} style={{ width: '100%', height: '100%' }} />
+    <>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Camera
+          ref={(camera) => {
+            cameraRef.current = camera;
+          }}
+          style={styles.camera}
+          type={type}
+        />
+        {true && (
+          <TouchableOpacity onPress={() => takePicture()} style={styles.snapButton} />
         )}
       </View>
-    </View>
+
+      {imageUri && (
+        <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
+          <PhotoScreen imageUri={imageUri} setImageUri={setImageURI} />
+        </View>
+      )}
+    </>
   );
 };
 
@@ -87,5 +77,14 @@ const styles = StyleSheet.create({
   camera: {
     width: '100%',
     height: '100%',
+  },
+  snapButton: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'gray',
+    position: 'absolute',
+    bottom: 80,
+    borderRadius: 50,
+    opacity: 0.5,
   },
 });
