@@ -26,6 +26,19 @@ const Screen = () => {
     }
   };
 
+  const onLongPress = async () => {
+    if (cameraRef.current) {
+      console.log('pressed');
+      let video = await cameraRef.current.recordAsync();
+      console.log(video);
+    }
+  };
+
+  const onPressOut = () => {
+    console.log('pressed out');
+    cameraRef.current?.stopRecording();
+  };
+
   if (hasPermission === null) {
     return <View />;
   }
@@ -44,7 +57,12 @@ const Screen = () => {
           type={type}
         />
         {true && (
-          <TouchableOpacity onPress={() => takePicture()} style={styles.snapButton}>
+          <TouchableOpacity
+            onLongPress={onLongPress}
+            onPressOut={onPressOut}
+            //onPress={() => takePicture()}
+            style={styles.snapButton}
+          >
             <View
               style={{
                 width: 70,

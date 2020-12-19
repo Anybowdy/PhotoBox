@@ -13,6 +13,7 @@ initializeFirebase();
 
 export default function App() {
   const [init, setInit] = useState<Boolean | null>(null);
+  const [scrollEnabled, setScrollEnabled] = useState(true);
 
   const currentUser = firebase.auth().currentUser;
 
@@ -38,7 +39,7 @@ export default function App() {
   }
 
   return (
-    <Swiper index={1} showsPagination={false} loop={false}>
+    <Swiper index={1} showsPagination={false} loop={false} scrollEnabled={scrollEnabled}>
       <ContentScreen />
       <Screen />
     </Swiper>
