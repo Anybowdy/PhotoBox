@@ -3,14 +3,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
 
 const ContentScreen = () => {
-  const [pic, setPic] = useState<string[]>([]);
-
-  var ref = firebase.database().ref('items');
-
-  ref.on('value', (snapshot) => {
-    const data = snapshot.val();
-    console.log('data ' + data);
-  });
+  const [items, setItems] = useState<any[] | null>(null);
 
   // const list = async () => {
   //   let ref = firebase.storage().ref();
@@ -23,12 +16,12 @@ const ContentScreen = () => {
   // };
 
   useEffect(() => {
-    setPic([]);
+    setItems([]);
     var ref = firebase.database().ref('items');
 
     const tes = ref.on('value', (snapshot) => {
-      const data = snapshot.val();
-      console.log('data ' + data);
+      console.log(snapshot.val());
+      setItems((old) => [...old, snapshot.val()]);
     });
 
     return () => {
@@ -39,20 +32,22 @@ const ContentScreen = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'rgba(200,100,200,0.1)' }}>
-      <FlatList
-        keyExtractor={(item, index) => item}
-        data={pic}
-        renderItem={() => (
-          <View
-            style={{
-              width: '100%',
-              height: 80,
-              backgroundColor: 'red',
-              marginVertical: 20,
-            }}
-          />
-        )}
-      />
+      {items && (
+        <FlatList
+          keyExtractor={(item, index) => item?.imageUri}
+          data={items}
+          renderItem={() => (
+            <View
+              style={{
+                width: '100%',
+                height: 80,
+                backgroundColor: 'red',
+                marginVertical: 20,
+              }}
+            />
+          )}
+        />
+      )}
       <Text></Text>
     </View>
   );
