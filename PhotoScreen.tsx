@@ -1,7 +1,15 @@
-import React, { FC } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { FC, useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import * as firebase from 'firebase';
 
 interface Props {
   imageUri: string;
@@ -9,6 +17,22 @@ interface Props {
 }
 
 const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
+  const [loading, setLoading] = useState<Boolean>(false);
+
+  const onSend = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+
+      let res = await firebase.storage().ref('image').put(blob);
+    } catch (e) {
+      console.log('Error while uploading the image: ' + e);
+    }
+    setLoading(false);
+    setImageUri(null);
+  };
+
   return (
     <>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -20,9 +44,15 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
         <FontAwesome name='close' size={30} color='white' />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.sendButton}>
-        <Ionicons name='send-sharp' size={24} color='black' />
-        <Text style={{ fontSize: 18, fontWeight: '500' }}>ENVOYER</Text>
+      <TouchableOpacity onPress={onSend} style={styles.sendButton}>
+        {loading ? (
+          <ActivityIndicator animating={true} />
+        ) : (
+          <>
+            <Ionicons name='send-sharp' size={24} color='black' />
+            <Text style={{ fontSize: 18, fontWeight: '500' }}>Envoyer</Text>
+          </>
+        )}
       </TouchableOpacity>
     </>
   );
@@ -44,13 +74,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 40,
     right: 20,
-    width: 200,
+    width: 150,
     height: 55,
     backgroundColor: 'yellow',
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 100,
     flexDirection: 'row',
-    padding: 15,
+    padding: 5,
   },
 });
