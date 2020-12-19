@@ -64,9 +64,9 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
         />
         {true && (
           <TouchableOpacity
-            onLongPress={onLongPress}
-            onPressOut={onPressOut}
-            //onPress={() => takePicture()}
+            //onLongPress={onLongPress}
+            //onPressOut={onPressOut}
+            onPress={() => takePicture()}
             style={styles.snapButton}
           >
             <View

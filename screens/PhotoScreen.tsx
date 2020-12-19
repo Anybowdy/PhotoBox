@@ -26,15 +26,22 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
       const blob = await fetchedImage.blob();
 
       const imageName = imageUri.substring(imageUri.lastIndexOf('/') + 1);
-
-      await firebase
+      let ref = firebase
         .storage()
         .ref()
-        .child('images/' + imageName)
-        .put(blob);
+        .child('images/' + imageName);
+
+      await ref.put(blob);
+      await ref.getDownloadURL().then((url) => {
+        firebase.database().ref('items').set({
+          email: firebase.auth().currentUser?.email,
+          imageURL: url,
+        });
+      });
     } catch (e) {
       console.log('Error while uploading the image: ' + e);
     }
+    firebase.storage().ref().getDownloadURL;
     setLoading(false);
     setImageUri(null);
   };

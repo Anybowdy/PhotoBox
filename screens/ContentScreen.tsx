@@ -5,19 +5,36 @@ import * as firebase from 'firebase';
 const ContentScreen = () => {
   const [pic, setPic] = useState<string[]>([]);
 
-  const list = async () => {
-    let ref = firebase.storage().ref();
-    var test = ref.child('images');
-    let response = await test.listAll();
+  var ref = firebase.database().ref('items');
 
-    response.items.forEach((item) => {
-      setPic((old) => [...old, item.name]);
-    });
-  };
+  ref.on('value', (snapshot) => {
+    const data = snapshot.val();
+    console.log('data ' + data);
+  });
+
+  // const list = async () => {
+  //   let ref = firebase.storage().ref();
+  //   var test = ref.child('images');
+  //   let response = await test.listAll();
+
+  //   response.items.forEach((item) => {
+  //     setPic((old) => [...old, item.name]);
+  //   });
+  // };
 
   useEffect(() => {
     setPic([]);
-    list();
+    var ref = firebase.database().ref('items');
+
+    const tes = ref.on('value', (snapshot) => {
+      const data = snapshot.val();
+      console.log('data ' + data);
+    });
+
+    return () => {
+      ref.off('value', tes);
+    };
+    //list();
   }, []);
 
   return (
