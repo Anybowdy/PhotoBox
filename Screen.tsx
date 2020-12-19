@@ -6,7 +6,6 @@ import PhotoScreen from './PhotoScreen';
 
 const Screen = () => {
   const cameraRef = useRef<Camera | null>();
-
   const [imageUri, setImageURI] = useState<string | null>(null);
 
   const storeRandom = async () => {
@@ -39,13 +38,8 @@ const Screen = () => {
     if (cameraRef.current) {
       let photo = await cameraRef.current.takePictureAsync({ quality: 1 });
       setImageURI(photo.uri);
-      console.log(photo);
     }
   };
-
-  // if (imageUri) {
-  //   return <PhotoScreen imageUri={imageUri} setImageUri={setImageURI} />;
-  // }
 
   return (
     <>
@@ -58,7 +52,16 @@ const Screen = () => {
           type={type}
         />
         {true && (
-          <TouchableOpacity onPress={() => takePicture()} style={styles.snapButton} />
+          <TouchableOpacity onPress={() => takePicture()} style={styles.snapButton}>
+            <View
+              style={{
+                width: 70,
+                height: 70,
+                backgroundColor: 'white',
+                borderRadius: 40,
+              }}
+            ></View>
+          </TouchableOpacity>
         )}
       </View>
 
@@ -86,5 +89,7 @@ const styles = StyleSheet.create({
     bottom: 80,
     borderRadius: 50,
     opacity: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
