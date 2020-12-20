@@ -18,6 +18,10 @@ const LoginScreen = () => {
       let user = await firebase
         .auth()
         .createUserWithEmailAndPassword(creds.email, creds.password);
+      firebase.auth().currentUser?.updateProfile({
+        displayName: creds.email.split('@')[0],
+      });
+      console.log(creds.email.split('@')[0]);
     } catch (e) {
       console.log('Error while login: ' + e);
     }

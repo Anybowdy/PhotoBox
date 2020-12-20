@@ -27,7 +27,7 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
 
   const takePicture = async () => {
     if (cameraRef.current) {
-      let photo = await cameraRef.current.takePictureAsync({ quality: 0.2 });
+      let photo = await cameraRef.current.takePictureAsync({ quality: 0.001 });
       setImageURI(photo.uri);
     }
   };

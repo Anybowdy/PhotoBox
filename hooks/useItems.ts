@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect } from 'react';
 import * as firebase from 'firebase';
 
 const useItems = () => {
@@ -7,11 +6,11 @@ const useItems = () => {
 
   useEffect(() => {
     setItems([]);
-    var itemsRef = firebase.database().ref('items');
+    var itemsRef = firebase.database().ref('items').orderByChild('timestamp');
 
     const onItemsAdded = itemsRef.on('child_added', (snapshot) => {
-      console.log(snapshot.val());
-      setItems((old) => [...old, snapshot.val()]);
+      console.log('Item added');
+      setItems((old) => [snapshot.val(), ...old]);
     });
 
     return () => {
@@ -23,5 +22,3 @@ const useItems = () => {
 };
 
 export default useItems;
-
-const styles = StyleSheet.create({});

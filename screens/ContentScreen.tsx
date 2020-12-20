@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, Image } from 'react-native';
-import * as firebase from 'firebase';
+import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import useItems from '../hooks/useItems';
+import { AntDesign } from '@expo/vector-icons';
+import * as firebase from 'firebase';
 
 const ContentScreen = () => {
   const { items } = useItems();
+
+  // useEffect(() => {
+  //   items.forEach((it) => {
+  //     console.log(it.timestamp);
+  //   });
+  // }, [items]);
 
   const convert = (timeStamp: number) => {
     let now = new Date().getTime();
@@ -28,8 +35,6 @@ const ContentScreen = () => {
         flex: 1,
         backgroundColor: 'rgba(200,100,200,0.1)',
         paddingVertical: 0,
-        //justifyContent: 'center',
-        //alignItems: 'center',
       }}
     >
       <View
@@ -45,10 +50,22 @@ const ContentScreen = () => {
         >
           Photos
         </Text>
+        <TouchableOpacity
+          onPress={() => firebase.auth().signOut()}
+          style={{
+            height: 30,
+            width: 30,
+            position: 'absolute',
+            left: 20,
+            bottom: 15,
+          }}
+        >
+          <AntDesign name='poweroff' size={20} color='black' />
+        </TouchableOpacity>
       </View>
       <FlatList
         keyExtractor={(item, index) => item?.id}
-        data={items.reverse()}
+        data={items}
         renderItem={(item) => (
           <View
             style={{
@@ -62,7 +79,7 @@ const ContentScreen = () => {
             }}
           >
             <Image
-              source={{ uri: item.item.imageURL }}
+              //source={{ uri: item.item.imageURL }}
               style={{
                 width: 40,
                 height: 40,
@@ -72,7 +89,7 @@ const ContentScreen = () => {
               }}
             />
             <View style={{ flexDirection: 'column' }}>
-              <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.item.email}</Text>
+              <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.item.author}</Text>
               <Text
                 style={{
                   fontSize: 14,

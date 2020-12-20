@@ -35,7 +35,7 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
       await ref.getDownloadURL().then((url) => {
         let itemsRef = firebase.database().ref('items/').push();
         itemsRef.set({
-          email: firebase.auth().currentUser?.email,
+          author: firebase.auth().currentUser?.displayName,
           imageURL: url,
           id: itemsRef.key,
           timestamp: new Date().getTime(),

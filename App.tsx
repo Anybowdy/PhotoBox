@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Screen from './screens/Screen';
@@ -14,13 +13,15 @@ initializeFirebase();
 export default function App() {
   const [init, setInit] = useState<Boolean | null>(null);
   const [scrollEnabled, setScrollEnabled] = useState(true);
-
-  const currentUser = firebase.auth().currentUser;
+  const [authenticated, setAuthenticated] = useState(false);
 
   const don = (user: firebase.User | null) => {
     if (user) {
       var uid = user.uid;
       console.log('User authenticated: ' + uid);
+      setAuthenticated(true);
+    } else {
+      setAuthenticated(false);
     }
     setInit(true);
   };
@@ -34,7 +35,7 @@ export default function App() {
     return null;
   }
 
-  if (!currentUser) {
+  if (!authenticated) {
     return <LoginScreen />;
   }
 
