@@ -1,24 +1,20 @@
-import * as functions from 'firebase-functions';
-import * as Storage from '@google-cloud/storage';
-import { tmpdir } from 'os';
-import { join, dirname } from 'path';
+const Storage = require('@google-cloud/storage');
+const sharp = require('sharp');
+const fs = requier('fs-extra');
+const os = require('os');
+const path = require('path');
 
-import * as sharp from 'sharp';
-import * as fs from 'fs-extra';
-
-const gcs = Storage();
-
-export const generateThmbs = functions.storage.object().onFinalize(async (object) => {
-  const bucket = gcs.bucket(object.bucket);
+export const generateThumbs = functions.storage.object().onFinalize(async (object) => {
+  const bucket = Storage().bucket(object.bucket);
   const filePath = object.name;
   const fileName = filePath?.split('/').pop();
-  var bucketDir: string;
+  var bucketDir;
   if (filePath) {
-    bucketDir = dirname(filePath);
+    bucketDir = path.dirname(filePath);
   }
 
-  const workingDir = join(tmpdir(), 'thumbs');
-  const tmpFilePath = join(workingDir, 'source.png');
+  const workingDir = path.join(os.tmpdir(), 'thumbs');
+  const tmpFilePath = path.join(workingDir, 'source.png');
 
   if (fileName?.includes('thumb@') || !object.contentType?.includes('image')) {
     console.log('exit function');
@@ -35,12 +31,12 @@ export const generateThmbs = functions.storage.object().onFinalize(async (object
 
   const uploadPromises = sizes.map(async (size) => {
     const thumbName = `thumb@${size}_${fileName}`;
-    const thumbPath = join(workingDir, thumbName);
+    const thumbPath = path.join(workingDir, thumbName);
 
     await sharp(tmpFilePath).resize(size, size).toFile(thumbPath);
 
     return bucket.upload(thumbPath, {
-      destination: join(bucketDir, thumbName),
+      destination: path.join(bucketDir, thumbName),
     });
   });
 
