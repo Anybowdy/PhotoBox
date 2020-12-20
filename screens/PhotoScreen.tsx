@@ -25,11 +25,11 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
       const fetchedImage = await fetch(imageUri);
       const blob = await fetchedImage.blob();
 
-      const imageName = imageUri.substring(imageUri.lastIndexOf('/') + 1);
+      const imageDir = 'test/';
       let ref = firebase
         .storage()
         .ref()
-        .child('images/' + imageName);
+        .child('images/' + 'original');
 
       await ref.put(blob);
       await ref.getDownloadURL().then((url) => {

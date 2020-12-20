@@ -9,7 +9,7 @@ const useItems = () => {
     var itemsRef = firebase.database().ref('items').orderByChild('timestamp');
 
     const onItemsAdded = itemsRef.on('child_added', (snapshot) => {
-      console.log('Item added');
+      //console.log('Item added');
       setItems((old) => [snapshot.val(), ...old]);
     });
 
