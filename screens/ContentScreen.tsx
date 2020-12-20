@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View, Image } from 'react-native';
 import * as firebase from 'firebase';
+import useItems from '../hooks/useItems';
 
 const ContentScreen = () => {
-  const [items, setItems] = useState<any[]>([]);
-
-  useEffect(() => {
-    setItems([]);
-    var ref = firebase.database().ref('items');
-
-    const onItemsAdded = ref.on('child_added', (snapshot) => {
-      console.log(snapshot.val());
-      setItems((old) => [...old, snapshot.val()]);
-    });
-
-    return () => {
-      ref.off('child_added', onItemsAdded);
-    };
-  }, []);
+  const { items } = useItems();
 
   const convert = (timeStamp: number) => {
     let now = new Date().getTime();
