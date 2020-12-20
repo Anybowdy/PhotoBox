@@ -3,31 +3,20 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
 
 const ContentScreen = () => {
-  const [items, setItems] = useState<any[] | null>(null);
-
-  // const list = async () => {
-  //   let ref = firebase.storage().ref();
-  //   var test = ref.child('images');
-  //   let response = await test.listAll();
-
-  //   response.items.forEach((item) => {
-  //     setPic((old) => [...old, item.name]);
-  //   });
-  // };
+  const [items, setItems] = useState<any[]>([]);
 
   useEffect(() => {
     setItems([]);
     var ref = firebase.database().ref('items');
 
-    const tes = ref.on('value', (snapshot) => {
+    const onItemsAdded = ref.on('child_added', (snapshot) => {
       console.log(snapshot.val());
       setItems((old) => [...old, snapshot.val()]);
     });
 
     return () => {
-      ref.off('value', tes);
+      ref.off('child_added', onItemsAdded);
     };
-    //list();
   }, []);
 
   return (

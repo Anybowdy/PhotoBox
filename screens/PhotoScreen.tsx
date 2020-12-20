@@ -33,13 +33,10 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
 
       await ref.put(blob);
       await ref.getDownloadURL().then((url) => {
-        firebase
-          .database()
-          .ref('items/' + Math.floor(Math.random() * 100))
-          .set({
-            email: firebase.auth().currentUser?.email,
-            imageURL: url,
-          });
+        firebase.database().ref('items/').push().set({
+          email: firebase.auth().currentUser?.email,
+          imageURL: url,
+        });
       });
     } catch (e) {
       console.log('Error while uploading the image: ' + e);
