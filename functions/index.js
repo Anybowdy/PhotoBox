@@ -17,7 +17,6 @@ exports.generateThumbs = functions.storage.object().onFinalize(async (object) =>
   if (filePath) {
     bucketDir = path.dirname(filePath);
   }
-  const downloadtoken = object.metadata.firebaseStorageDownloadTokens;
 
   const workingDir = path.join(os.tmpdir(), 'thumbs');
   const tmpFilePath = path.join(workingDir, 'source.png');
@@ -44,9 +43,9 @@ exports.generateThumbs = functions.storage.object().onFinalize(async (object) =>
     return bucket.upload(thumbPath, {
       destination: path.join(bucketDir, thumbName),
       metadata: {
+        contentType: object.contentType,
         metadata: {
-          contentType: object.contentType,
-          firebaseStorageDownloadTokens: downloadtoken, // access token
+          firebaseStorageDownloadTokens: object.metadata.firebaseStorageDownloadTokens,
         },
       },
     });
