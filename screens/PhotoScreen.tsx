@@ -33,9 +33,12 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
 
       await ref.put(blob);
       await ref.getDownloadURL().then((url) => {
-        firebase.database().ref('items/').push().set({
+        let itemsRef = firebase.database().ref('items/').push();
+        itemsRef.set({
           email: firebase.auth().currentUser?.email,
           imageURL: url,
+          id: itemsRef.key,
+          timestamp: new Date().getTime(),
         });
       });
     } catch (e) {
