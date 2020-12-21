@@ -3,15 +3,11 @@ import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity } from 'react
 import useItems from '../hooks/useItems';
 import { AntDesign } from '@expo/vector-icons';
 import * as firebase from 'firebase';
+import ThumbImage from './ThumbImage';
 
 const ContentScreen = () => {
   const { items } = useItems();
-
-  // useEffect(() => {
-  //   items.forEach((it) => {
-  //     console.log(it.timestamp);
-  //   });
-  // }, [items]);
+  const [thumbSource, setThumbSource] = useState();
 
   const convert = (timeStamp: number) => {
     let now = new Date().getTime();
@@ -78,15 +74,10 @@ const ContentScreen = () => {
               backgroundColor: 'white',
             }}
           >
-            <Image
-              //source={{ uri: item.item.imageURL }}
-              style={{
-                width: 40,
-                height: 40,
-                backgroundColor: 'white',
-                marginRight: 20,
-                borderRadius: 10,
-              }}
+            <ThumbImage
+              thumbSource={item.item.thumbURL}
+              alternativeSource={item.item.imageURL}
+              style={{ marginRight: 20 }}
             />
             <View style={{ flexDirection: 'column' }}>
               <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.item.author}</Text>

@@ -10,10 +10,19 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import * as firebase from 'firebase';
+//var uuid = require('react-native-uuid');
 
 interface Props {
   imageUri: string;
   setImageUri: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c == 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
 
 const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
@@ -25,18 +34,23 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
       const fetchedImage = await fetch(imageUri);
       const blob = await fetchedImage.blob();
 
-      const imageDir = uuid.v4() + '/';
-      let ref = firebase
+      const imageDir = uuidv4() + '/';
+      let directoryRef = firebase
         .storage()
         .ref()
-        .child('images/' + imageDir + 'original');
+        .child('images/' + imageDir);
+
+      let ref = directoryRef.child('original');
 
       await ref.put(blob);
       await ref.getDownloadURL().then((url) => {
         let itemsRef = firebase.database().ref('items/').push();
+
+        let thumbURL = url.replace('original', 'thumb@128_original');
         itemsRef.set({
           author: firebase.auth().currentUser?.displayName,
           imageURL: url,
+          thumbURL: thumbURL,
           id: itemsRef.key,
           timestamp: new Date().getTime(),
         });
