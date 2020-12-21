@@ -10,36 +10,30 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import * as firebase from 'firebase';
-//var uuid = require('react-native-uuid');
+import { Video } from 'expo-av';
+import { uuidv4 } from '../Utils';
 
 interface Props {
-  imageUri: string;
+  imageUri: string | null;
+  videoUri: string | null;
+  closeView: () => void;
   setImageUri: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-function uuidv4() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = (Math.random() * 16) | 0,
-      v = c == 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
-
-const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
+const PhotoScreen: FC<Props> = ({ imageUri, setImageUri, videoUri, closeView }) => {
   const [loading, setLoading] = useState<Boolean>(false);
 
   const onSend = async () => {
+    if (!imageUri) {
+      return;
+    }
     setLoading(true);
     try {
       const fetchedImage = await fetch(imageUri);
       const blob = await fetchedImage.blob();
 
-      const imageDir = uuidv4() + '/';
-      let directoryRef = firebase
-        .storage()
-        .ref()
-        .child('images/' + imageDir);
-
+      const imageDir = 'images/' + uuidv4() + '/';
+      let directoryRef = firebase.storage().ref().child(imageDir);
       let ref = directoryRef.child('original');
 
       await ref.put(blob);
@@ -69,8 +63,17 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri }) => {
         {imageUri && (
           <Image source={{ uri: imageUri }} style={{ width: '100%', height: '100%' }} />
         )}
+        {videoUri && (
+          <Video
+            source={{ uri: videoUri }}
+            style={{ width: '100%', height: '100%' }}
+            shouldPlay
+            isLooping
+            resizeMode='cover'
+          />
+        )}
       </View>
-      <TouchableOpacity onPress={() => setImageUri(null)} style={styles.closeButton}>
+      <TouchableOpacity onPress={() => closeView()} style={styles.closeButton}>
         <FontAwesome name='close' size={30} color='white' />
       </TouchableOpacity>
 

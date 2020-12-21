@@ -3,11 +3,10 @@ import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity } from 'react
 import useItems from '../hooks/useItems';
 import { AntDesign } from '@expo/vector-icons';
 import * as firebase from 'firebase';
-import ThumbImage from './ThumbImage';
+import ThumbImage from '../components/ThumbImage';
 
 const ContentScreen = () => {
   const { items } = useItems();
-  const [thumbSource, setThumbSource] = useState();
 
   const convert = (timeStamp: number) => {
     let now = new Date().getTime();

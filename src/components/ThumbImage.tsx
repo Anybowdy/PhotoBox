@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 
-import { StyleSheet, Image, TextStyle, StyleProp, ImageStyle } from 'react-native';
+import { StyleSheet, Image, StyleProp, ImageStyle } from 'react-native';
 
 interface Props {
   thumbSource: string;

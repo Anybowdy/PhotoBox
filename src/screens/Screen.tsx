@@ -4,8 +4,6 @@ import * as firebase from 'firebase';
 import { Camera } from 'expo-camera';
 import PhotoScreen from './PhotoScreen';
 
-import Swiper from 'react-native-swiper';
-
 interface Props {
   setScrollEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -32,10 +30,16 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
     }
   };
 
+  const closeChildView = () => {
+    setImageURI(null);
+    setVideoURI(null);
+  };
+
   const onLongPress = async () => {
     if (cameraRef.current) {
       setScrollEnabled(false);
       let video = await cameraRef.current.recordAsync();
+      setVideoURI(video.uri);
       console.log(video);
     }
   };
@@ -64,8 +68,8 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
         />
         {true && (
           <TouchableOpacity
-            //onLongPress={onLongPress}
-            //onPressOut={onPressOut}
+            onLongPress={onLongPress}
+            onPressOut={onPressOut}
             onPress={() => takePicture()}
             style={styles.snapButton}
           >
@@ -81,9 +85,14 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
         )}
       </View>
 
-      {imageUri && (
+      {(imageUri || videoUri) && (
         <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
-          <PhotoScreen imageUri={imageUri} setImageUri={setImageURI} />
+          <PhotoScreen
+            imageUri={imageUri}
+            videoUri={videoUri}
+            setImageUri={setImageURI}
+            closeView={closeChildView}
+          />
         </View>
       )}
     </>

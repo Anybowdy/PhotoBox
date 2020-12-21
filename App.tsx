@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Screen from './screens/Screen';
-import LoginScreen from './screens/LoginScreen';
-import ContentScreen from './screens/ContentScreen';
 import * as firebase from 'firebase';
 import Swiper from 'react-native-swiper';
+
+import Screen from './src/screens/Screen';
+import LoginScreen from './src/screens/LoginScreen';
+import ContentScreen from './src/screens/ContentScreen';
 
 import { initializeFirebase } from './FirebaseConfig';
 
@@ -46,12 +47,3 @@ export default function App() {
     </Swiper>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
