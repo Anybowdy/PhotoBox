@@ -40,19 +40,15 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
       setScrollEnabled(false);
       let video = await cameraRef.current.recordAsync();
       setVideoURI(video.uri);
-      console.log(video);
     }
   };
 
   const onPressOut = () => {
-    setScrollEnabled(true);
     cameraRef.current?.stopRecording();
+    setScrollEnabled(true);
   };
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
+  if (!hasPermission || hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
 
@@ -90,7 +86,6 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
           <PhotoScreen
             imageUri={imageUri}
             videoUri={videoUri}
-            setImageUri={setImageURI}
             closeView={closeChildView}
           />
         </View>

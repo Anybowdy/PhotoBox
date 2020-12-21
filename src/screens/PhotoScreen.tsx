@@ -12,21 +12,26 @@ import { Ionicons } from '@expo/vector-icons';
 import * as firebase from 'firebase';
 import { Video } from 'expo-av';
 import { uuidv4 } from '../Utils';
+import Item from '../models/Items';
 
 interface Props {
   imageUri: string | null;
   videoUri: string | null;
   closeView: () => void;
-  setImageUri: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const PhotoScreen: FC<Props> = ({ imageUri, setImageUri, videoUri, closeView }) => {
+const PhotoScreen: FC<Props> = ({ imageUri, videoUri, closeView }) => {
   const [loading, setLoading] = useState<Boolean>(false);
 
   const onSend = async () => {
-    if (!imageUri) {
-      return;
+    if (imageUri) {
+      sendPicture(imageUri);
+    } else {
+      console.log('sending video');
     }
+  };
+
+  const sendPicture = async (imageUri: string) => {
     setLoading(true);
     try {
       const fetchedImage = await fetch(imageUri);
@@ -41,20 +46,19 @@ const PhotoScreen: FC<Props> = ({ imageUri, setImageUri, videoUri, closeView }) 
         let itemsRef = firebase.database().ref('items/').push();
 
         let thumbURL = url.replace('original', 'thumb@128_original');
-        itemsRef.set({
-          author: firebase.auth().currentUser?.displayName,
-          imageURL: url,
-          thumbURL: thumbURL,
-          id: itemsRef.key,
-          timestamp: new Date().getTime(),
-        });
+        let newItem = new Item(
+          firebase.auth().currentUser?.displayName ?? 'Inconnu',
+          url,
+          thumbURL
+        );
+        itemsRef.set(newItem);
       });
     } catch (e) {
       console.log('Error while uploading the image: ' + e);
     }
     firebase.storage().ref().getDownloadURL;
     setLoading(false);
-    setImageUri(null);
+    closeView();
   };
 
   return (
