@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
-import PhotoScreen, { Media } from './PhotoScreen';
-import { MediaType } from './PhotoScreen';
+import PhotoScreen from './PhotoScreen';
+import { MediaType, Media } from '../hooks/useMedia';
 
 interface Props {
   setScrollEnabled: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,9 +13,6 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
   const [hasPermission, setHasPermission] = useState<Boolean>();
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [media, setMedia] = useState<Media | null>(null);
-
-  const [imageUri, setImageURI] = useState<string | null>(null);
-  const [videoUri, setVideoURI] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -85,12 +82,7 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
 
       {media && (
         <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
-          <PhotoScreen
-            imageUri={imageUri}
-            videoUri={videoUri}
-            closeView={closeChildView}
-            media={media}
-          />
+          <PhotoScreen closeView={closeChildView} media={media} />
         </View>
       )}
     </>

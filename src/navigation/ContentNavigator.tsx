@@ -3,7 +3,7 @@ import { StyleSheet, Image, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import ContentScreen from '../screens/ContentScreen';
+import ContentListScreen from '../screens/ContentListScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import { FontAwesome } from '@expo/vector-icons';
@@ -15,8 +15,8 @@ const ContentNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Home'>
         <Stack.Screen
-          name='ContentScreen'
-          component={ContentScreen}
+          name='ContentListScreen'
+          component={ContentListScreen}
           options={{
             headerTitle: () => (
               <Image

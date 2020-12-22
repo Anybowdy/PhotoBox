@@ -5,7 +5,7 @@ import ThumbImage from '../components/ThumbImage';
 
 import { getReadableFromTimestamp } from '../Utils';
 
-const ContentScreen = () => {
+const ContentListScreen = () => {
   const { items } = useItems();
 
   return (
@@ -34,7 +34,7 @@ const ContentScreen = () => {
   );
 };
 
-export default ContentScreen;
+export default ContentListScreen;
 
 const styles = StyleSheet.create({
   itemCell: {
