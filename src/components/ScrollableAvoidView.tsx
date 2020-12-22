@@ -10,7 +10,7 @@ const ScrollableAvoidView: FC<Props> = ({ children }) => {
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior='padding'
-      keyboardVerticalOffset={-150}
+      keyboardVerticalOffset={-100}
     >
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import * as firebase from 'firebase';
-import Screen from './Screen';
-import { ScrollView } from 'react-native-gesture-handler';
 import ScrollableAvoidView from '../components/ScrollableAvoidView';
+import * as firebase from 'firebase';
 
 const LoginScreen = () => {
   const [creds, setCreds] = useState({
     email: '',
     password: '',
+    displayName: '',
   });
 
   const onChangeText = (field: string, newValue: string) => {
@@ -21,9 +20,9 @@ const LoginScreen = () => {
         .auth()
         .createUserWithEmailAndPassword(creds.email, creds.password);
       firebase.auth().currentUser?.updateProfile({
-        displayName: creds.email.split('@')[0],
+        displayName:
+          creds.displayName == '' ? creds.email.split('@')[0] : creds.displayName,
       });
-      console.log(creds.email.split('@')[0]);
     } catch (e) {
       Alert.alert(e.toString());
     }
@@ -67,6 +66,13 @@ const LoginScreen = () => {
           value={creds.password}
           style={styles.input}
           onChangeText={(text) => onChangeText('password', text)}
+        />
+
+        <TextInput
+          placeholder='Username'
+          value={creds.displayName}
+          style={styles.input}
+          onChangeText={(text) => onChangeText('displayName', text)}
         />
 
         <TouchableOpacity
