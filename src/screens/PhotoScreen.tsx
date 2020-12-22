@@ -56,7 +56,6 @@ const PhotoScreen: FC<Props> = ({ imageUri, videoUri, closeView }) => {
     } catch (e) {
       console.log('Error while uploading the image: ' + e);
     }
-    firebase.storage().ref().getDownloadURL;
     setLoading(false);
     closeView();
   };

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import Swiper from 'react-native-swiper';
+
+import ContentNavigator from './src/navigation/ContentNavigator';
 
 import Screen from './src/screens/Screen';
 import LoginScreen from './src/screens/LoginScreen';
@@ -42,7 +44,7 @@ export default function App() {
 
   return (
     <Swiper index={1} showsPagination={false} loop={false} scrollEnabled={scrollEnabled}>
-      <ContentScreen />
+      <ContentNavigator />
       <Screen setScrollEnabled={setScrollEnabled} />
     </Swiper>
   );
