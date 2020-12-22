@@ -8,56 +8,36 @@ import ThumbImage from '../components/ThumbImage';
 const ContentScreen = () => {
   const { items } = useItems();
 
-  const convert = (timeStamp: number) => {
+  const getReadableFromTimestamp = (timestamp: number) => {
     let now = new Date().getTime();
-    let sec = Math.floor((now - timeStamp) / 1000);
-    if (sec < 60) {
-      return sec + ' secondes';
-    }
+    var result: number = -1;
+    var timeType: string = '';
 
+    let sec = Math.floor((now - timestamp) / 1000);
     let min = Math.floor(sec / 60);
-    if (min < 60) {
-      return min + ' minutes';
-    }
-
     let hour = Math.floor(min / 60);
-    return hour + ' heures';
+
+    if (sec < 60) {
+      result = sec;
+      timeType = 'seconde';
+    } else if (min < 60) {
+      result = min;
+      timeType = 'minute';
+    } else if (hour < 24) {
+      result = hour;
+      timeType = 'heure';
+    }
+    return 'Il y a ' + result + ' ' + timeType + (result > 1 ? 's' : '');
   };
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: 'rgba(200,100,200,0.1)',
+        backgroundColor: 'white',
         paddingVertical: 0,
       }}
     >
-      <View
-        style={{
-          width: '100%',
-          height: 100,
-          backgroundColor: 'white',
-          alignItems: 'center',
-        }}
-      >
-        <Text
-          style={{ fontSize: 20, fontWeight: '600', bottom: 20, position: 'absolute' }}
-        >
-          Photos
-        </Text>
-        <TouchableOpacity
-          onPress={() => firebase.auth().signOut()}
-          style={{
-            height: 30,
-            width: 30,
-            position: 'absolute',
-            left: 20,
-            bottom: 15,
-          }}
-        >
-          <AntDesign name='poweroff' size={20} color='black' />
-        </TouchableOpacity>
-      </View>
       <FlatList
         keyExtractor={(item, index) => item?.id}
         data={items}
@@ -87,7 +67,7 @@ const ContentScreen = () => {
                   color: 'rgba(0,0,0,0.5)',
                 }}
               >
-                Il y a {convert(item.item.timestamp)}
+                {getReadableFromTimestamp(item.item.timestamp)}
               </Text>
             </View>
           </View>
