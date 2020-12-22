@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import useItems from '../hooks/useItems';
 import ThumbImage from '../components/ThumbImage';
 
@@ -9,43 +9,21 @@ const ContentScreen = () => {
   const { items } = useItems();
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'white',
-        paddingVertical: 0,
-      }}
-    >
+    <View style={{ flex: 1 }}>
       <FlatList
-        keyExtractor={(item, index) => item?.id}
+        keyExtractor={(item) => item.id}
         data={items}
-        renderItem={(item) => (
-          <View
-            style={{
-              width: '100%',
-              height: 70,
-              paddingHorizontal: 20,
-              marginVertical: 0.2,
-              flexDirection: 'row',
-              alignItems: 'center',
-              backgroundColor: 'white',
-            }}
-          >
+        renderItem={({ item }) => (
+          <View style={styles.itemCell}>
             <ThumbImage
-              thumbSource={item.item.thumbURL}
-              alternativeSource={item.item.imageURL}
+              thumbSource={item.thumbURL}
+              alternativeSource={item.imageURL}
               style={{ marginRight: 20 }}
             />
             <View style={{ flexDirection: 'column' }}>
-              <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.item.author}</Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: '300',
-                  color: 'rgba(0,0,0,0.5)',
-                }}
-              >
-                {getReadableFromTimestamp(item.item.timestamp)}
+              <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.author}</Text>
+              <Text style={styles.timeStampText}>
+                {getReadableFromTimestamp(item.timestamp)}
               </Text>
             </View>
           </View>
@@ -57,4 +35,18 @@ const ContentScreen = () => {
 
 export default ContentScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  itemCell: {
+    width: '100%',
+    height: 70,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  timeStampText: {
+    fontSize: 14,
+    fontWeight: '300',
+    color: 'rgba(0,0,0,0.5)',
+  },
+});
