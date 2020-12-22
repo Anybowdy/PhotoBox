@@ -4,7 +4,6 @@ import useItems from '../hooks/useItems';
 import ThumbImage from '../components/ThumbImage';
 
 import { getReadableFromTimestamp } from '../Utils';
-import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MediaType } from '../hooks/useMedia';
 

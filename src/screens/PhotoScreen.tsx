@@ -20,8 +20,6 @@ interface Props {
 const PhotoScreen: FC<Props> = ({ closeView, media }) => {
   const { sendMedia, loading } = useMedia();
 
-  console.log(media);
-
   const send = async () => {
     await sendMedia(media);
     closeView();
