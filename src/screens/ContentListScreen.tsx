@@ -1,11 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import useItems from '../hooks/useItems';
 import ThumbImage from '../components/ThumbImage';
 
 import { getReadableFromTimestamp } from '../Utils';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { MediaType } from '../hooks/useMedia';
 
-const ContentListScreen = () => {
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../navigation/ContentNavigator';
+
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ContentListScreen'
+>;
+
+type Props = {
+  navigation: ProfileScreenNavigationProp;
+};
+
+const ContentListScreen: FC<Props> = ({ navigation }) => {
   const { items } = useItems();
 
   return (
@@ -15,7 +30,14 @@ const ContentListScreen = () => {
         keyExtractor={(item) => item.id}
         data={items}
         renderItem={({ item }) => (
-          <View style={styles.itemCell}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ItemContentScreen', {
+                media: { type: MediaType.Image, uri: item.imageURL },
+              })
+            }
+            style={styles.itemCell}
+          >
             <ThumbImage
               thumbSource={item.thumbURL}
               alternativeSource={item.imageURL}
@@ -27,7 +49,7 @@ const ContentListScreen = () => {
                 {getReadableFromTimestamp(item.timestamp)}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>

@@ -4,16 +4,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ContentListScreen from '../screens/ContentListScreen';
+import ItemContentScreen from '../screens/ItemContentScreen';
+
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import { FontAwesome } from '@expo/vector-icons';
+import { Media } from '../hooks/useMedia';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  ContentListScreen: undefined;
+  ItemContentScreen: { media: Media };
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 const ContentNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home'>
+      <Stack.Navigator>
         <Stack.Screen
           name='ContentListScreen'
           component={ContentListScreen}
@@ -37,6 +45,11 @@ const ContentNavigator = () => {
               </TouchableOpacity>
             ),
           }}
+        />
+        <Stack.Screen
+          name='ItemContentScreen'
+          component={ItemContentScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
