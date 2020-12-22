@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as firebase from 'firebase';
 import Screen from './Screen';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -25,7 +25,7 @@ const LoginScreen = () => {
       });
       console.log(creds.email.split('@')[0]);
     } catch (e) {
-      console.log('Error while login: ' + e);
+      Alert.alert(e.toString());
     }
   };
 
