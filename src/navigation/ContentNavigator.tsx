@@ -13,7 +13,7 @@ import { Media } from '../hooks/useMedia';
 
 export type RootStackParamList = {
   ContentListScreen: undefined;
-  ItemContentScreen: { media?: Media };
+  ItemContentScreen: { media: Media };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
