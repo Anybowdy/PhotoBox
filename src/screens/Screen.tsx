@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-import * as firebase from 'firebase';
 import { Camera } from 'expo-camera';
-import PhotoScreen from './PhotoScreen';
+import PhotoScreen, { Media } from './PhotoScreen';
+import { MediaType } from './PhotoScreen';
 
 interface Props {
   setScrollEnabled: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,6 +12,7 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
   const cameraRef = useRef<Camera | null>();
   const [hasPermission, setHasPermission] = useState<Boolean>();
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [media, setMedia] = useState<Media | null>(null);
 
   const [imageUri, setImageURI] = useState<string | null>(null);
   const [videoUri, setVideoURI] = useState<string | null>(null);
@@ -25,21 +26,22 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
 
   const takePicture = async () => {
     if (cameraRef.current) {
-      let photo = await cameraRef.current.takePictureAsync({ quality: 0.001 });
-      setImageURI(photo.uri);
+      let photo = await cameraRef.current.takePictureAsync({ quality: 0.1 });
+      let newMedia: Media = { type: MediaType.Image, uri: photo.uri };
+      setMedia(newMedia);
     }
   };
 
   const closeChildView = () => {
-    setImageURI(null);
-    setVideoURI(null);
+    setMedia(null);
   };
 
   const onLongPress = async () => {
     if (cameraRef.current) {
       setScrollEnabled(false);
       let video = await cameraRef.current.recordAsync();
-      setVideoURI(video.uri);
+      let newMedia: Media = { type: MediaType.Video, uri: video.uri };
+      setMedia(newMedia);
     }
   };
 
@@ -81,12 +83,13 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
         )}
       </View>
 
-      {(imageUri || videoUri) && (
+      {media && (
         <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
           <PhotoScreen
             imageUri={imageUri}
             videoUri={videoUri}
             closeView={closeChildView}
+            media={media}
           />
         </View>
       )}

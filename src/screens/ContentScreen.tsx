@@ -11,6 +11,7 @@ const ContentScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
+        style={{ backgroundColor: 'white' }}
         keyExtractor={(item) => item.id}
         data={items}
         renderItem={({ item }) => (
