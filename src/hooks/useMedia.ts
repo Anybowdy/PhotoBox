@@ -28,7 +28,8 @@ const useMedia = () => {
         let newItem = new Item(
           firebase.auth().currentUser?.displayName ?? 'Inconnu',
           url,
-          thumbURL
+          thumbURL,
+          media.type
         );
         itemsRef.set(newItem);
       });

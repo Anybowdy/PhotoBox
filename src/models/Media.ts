@@ -1,5 +1,5 @@
 enum MediaType {
-  Image,
+  Image = 1,
   Video,
 }
 
