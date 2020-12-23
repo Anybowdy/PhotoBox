@@ -10,7 +10,8 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Video } from 'expo-av';
-import useMedia, { MediaType, Media } from '../hooks/useMedia';
+import useMedia from '../hooks/useMedia';
+import { Media, MediaType } from '../models/Media';
 
 interface Props {
   media: Media;

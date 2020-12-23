@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import LoadableImage from '../components/LoadableImage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Item from '../models/Items';
+import { getReadableFromTimestamp } from '../Utils';
 
 type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -48,7 +49,7 @@ const ItemContentScreen: FC<Props> = ({ navigation, route: { params } }) => {
           <Text style={{ fontSize: 20, color: 'white', fontWeight: '500' }}>
             {item.author}
           </Text>
-          <Text style={{ fontSize: 15, color: '#333536' }}>{item.timestamp}</Text>
+          <Text style={{ fontSize: 15, color: '#333536' }}>{item.postedAt()}</Text>
         </View>
       </View>
       <View

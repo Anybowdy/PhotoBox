@@ -40,13 +40,11 @@ const ContentListScreen: FC<Props> = ({ navigation }) => {
             <ThumbImage
               thumbSource={item.thumbURL}
               alternativeSource={item.imageURL}
-              style={{ marginRight: 20, borderWidth: 2, borderColor: '#45bbf3' }}
+              style={{ marginRight: 20 }}
             />
             <View style={{ flexDirection: 'column' }}>
               <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.author}</Text>
-              <Text style={styles.timeStampText}>
-                {getReadableFromTimestamp(item.timestamp)}
-              </Text>
+              <Text style={styles.timeStampText}>{item.postedAt()}</Text>
             </View>
           </TouchableOpacity>
         )}

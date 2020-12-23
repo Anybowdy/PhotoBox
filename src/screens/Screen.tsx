@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import PhotoScreen from './PhotoScreen';
-import { MediaType, Media } from '../hooks/useMedia';
+import { Media, MediaType } from '../models/Media';
 
 interface Props {
   setScrollEnabled: React.Dispatch<React.SetStateAction<boolean>>;

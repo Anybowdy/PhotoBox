@@ -1,4 +1,5 @@
 import { uuidv4 } from '../Utils';
+import { getReadableFromTimestamp } from '../Utils';
 
 class Item {
   id: string;
@@ -15,6 +16,10 @@ class Item {
     this.thumbURL = thumbURL;
 
     this.timestamp = new Date().getTime();
+  }
+
+  postedAt() {
+    return getReadableFromTimestamp(this.timestamp);
   }
 }
 

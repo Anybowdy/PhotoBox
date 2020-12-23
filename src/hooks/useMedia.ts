@@ -3,16 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
 import { uuidv4 } from '../Utils';
 import Item from '../models/Items';
-
-export enum MediaType {
-  Image,
-  Video,
-}
-
-export interface Media {
-  uri: string;
-  type: MediaType;
-}
+import { Media, MediaType } from '../models/Media';
 
 const useMedia = () => {
   const [loading, setLoading] = useState<Boolean>(false);
