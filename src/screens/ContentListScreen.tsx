@@ -40,7 +40,7 @@ const ContentListScreen: FC<Props> = ({ navigation }) => {
             <ThumbImage
               thumbSource={item.thumbURL}
               alternativeSource={item.imageURL}
-              style={{ marginRight: 20 }}
+              style={{ marginRight: 20, borderWidth: 2, borderColor: '#45bbf3' }}
             />
             <View style={{ flexDirection: 'column' }}>
               <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.author}</Text>
@@ -60,7 +60,7 @@ export default ContentListScreen;
 const styles = StyleSheet.create({
   itemCell: {
     width: '100%',
-    height: 70,
+    height: 76,
     paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
