@@ -6,6 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/ContentNavigator';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import LoadableImage from '../components/LoadableImage';
 
 type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -57,10 +58,7 @@ const ItemContentScreen: FC<Props> = ({ navigation, route: { params } }) => {
           overflow: 'hidden',
         }}
       >
-        <Image
-          source={{ uri: params.media.uri }}
-          style={{ width: '100%', height: '100%' }}
-        />
+        <LoadableImage uri={params.media.uri} />
       </View>
       <Text></Text>
     </View>
