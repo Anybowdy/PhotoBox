@@ -7,16 +7,19 @@ import { plainToClass } from 'class-transformer';
 const useItems = () => {
   const [items, setItems] = useState<Item[]>([]);
 
+  var itemsRef = firebase
+    .database()
+    .ref('items')
+    .limitToLast(20)
+    .orderByChild('timestamp');
+
   useEffect(() => {
     setItems([]);
-    var itemsRef = firebase.database().ref('items').orderByChild('timestamp');
-
     const onItemsAdded = itemsRef.on('child_added', (snapshot) => {
       let response = snapshot.val();
       let realItem = plainToClass(Item, response as JSON);
       //console.log(realItem);
-
-      setItems((old) => [realItem, ...old]);
+      setItems((old) => [realItem, ...old].slice(0, 15));
     });
 
     return () => {

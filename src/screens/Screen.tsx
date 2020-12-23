@@ -11,8 +11,27 @@ interface Props {
 const Screen: FC<Props> = ({ setScrollEnabled }) => {
   const cameraRef = useRef<Camera | null>();
   const [hasPermission, setHasPermission] = useState<Boolean>();
-  const [type, setType] = useState(Camera.Constants.Type.back);
+
+  const frontCam = Camera.Constants.Type.front;
+  const backCam = Camera.Constants.Type.back;
+  const [type, setType] = useState(frontCam);
+
   const [media, setMedia] = useState<Media | null>(null);
+  const [lastTap, setLastTap] = useState<number | null>(null);
+
+  const handleDoubleTap = () => {
+    const now = Date.now();
+    const DOUBLE_PRESS_DELAY = 300;
+    if (lastTap && now - lastTap < DOUBLE_PRESS_DELAY) {
+      if (type == backCam) {
+        setType(frontCam);
+      } else {
+        setType(backCam);
+      }
+    } else {
+      setLastTap(now);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -23,7 +42,9 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
 
   const takePicture = async () => {
     if (cameraRef.current) {
-      let photo = await cameraRef.current.takePictureAsync({ quality: 0.1 });
+      let photo = await cameraRef.current.takePictureAsync({
+        quality: 0.1,
+      });
       let newMedia: Media = { type: MediaType.Image, uri: photo.uri };
       setMedia(newMedia);
     }
@@ -36,9 +57,13 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
   const onLongPress = async () => {
     if (cameraRef.current) {
       setScrollEnabled(false);
-      let video = await cameraRef.current.recordAsync();
-      let newMedia: Media = { type: MediaType.Video, uri: video.uri };
-      setMedia(newMedia);
+      try {
+        let video = await cameraRef.current.recordAsync();
+        let newMedia: Media = { type: MediaType.Video, uri: video.uri };
+        setMedia(newMedia);
+      } catch (e) {
+        console.log('Error on camera recording');
+      }
     }
   };
 
@@ -53,7 +78,11 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
 
   return (
     <>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <TouchableOpacity
+        onPress={handleDoubleTap}
+        activeOpacity={1}
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      >
         <Camera
           ref={(camera) => {
             cameraRef.current = camera;
@@ -78,7 +107,7 @@ const Screen: FC<Props> = ({ setScrollEnabled }) => {
             ></View>
           </TouchableOpacity>
         )}
-      </View>
+      </TouchableOpacity>
 
       {media && (
         <View style={{ position: 'absolute', width: '100%', height: '100%' }}>

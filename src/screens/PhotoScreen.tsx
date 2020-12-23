@@ -24,6 +24,8 @@ const PhotoScreen: FC<Props> = ({ closeView, media }) => {
   const send = async () => {
     await sendMedia(media);
     closeView();
+    //while (true) {
+    //}
   };
 
   return (

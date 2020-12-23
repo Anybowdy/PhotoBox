@@ -7,7 +7,6 @@ import ContentNavigator from './src/navigation/ContentNavigator';
 
 import Screen from './src/screens/Screen';
 import LoginScreen from './src/screens/LoginScreen';
-import ContentListScreen from './src/screens/ContentListScreen';
 
 import { initializeFirebase } from './FirebaseConfig';
 

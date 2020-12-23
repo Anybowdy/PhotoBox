@@ -13,11 +13,21 @@ const LoadableImage: FC<Props> = ({ uri, mediaType = MediaType.Image }) => {
   const [animating, setAnimating] = useState(true);
   const animatedViewRef = useRef<any>(null);
 
-  const imageFadeDuration = mediaType == MediaType.Image ? 500 : 1500;
+  const videoRef = useRef<any>(null);
+
+  const imageFadeDuration = mediaType == MediaType.Image ? 500 : 1200;
 
   const onLoadEnd = () => {
     setAnimating(false);
     animatedViewRef.current.fadeIn(imageFadeDuration);
+  };
+
+  const onVideoTap = () => {
+    let ref = videoRef.current;
+    if (ref) {
+      if (ref) {
+      }
+    }
   };
 
   return (

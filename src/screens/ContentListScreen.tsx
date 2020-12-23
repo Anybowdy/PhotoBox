@@ -29,6 +29,7 @@ const ContentListScreen: FC<Props> = ({ navigation }) => {
         data={items}
         renderItem={({ item, index }) => (
           <TouchableOpacity
+            activeOpacity={0.6}
             onPress={() =>
               navigation.navigate('ItemContentScreen', {
                 item: items[index],
@@ -55,7 +56,7 @@ const ContentListScreen: FC<Props> = ({ navigation }) => {
               />
             )}
             <View style={{ flexDirection: 'column' }}>
-              <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.author}</Text>
+              <Text style={{ fontSize: 18, fontWeight: '500' }}>{item.author}</Text>
               <Text style={styles.timeStampText}>{item.postedAt()}</Text>
             </View>
           </TouchableOpacity>
