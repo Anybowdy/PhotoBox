@@ -10,13 +10,11 @@ const LoadableImage: FC<Props> = ({ uri }) => {
   const [animating, setAnimating] = useState(true);
   const imageRef = useRef<any>(null);
 
+  const imageFadeDuration = 400;
+
   const onLoadEnd = () => {
     setAnimating(false);
-    imageRef.current
-      .fadeIn(400)
-      .then((endState: { finished: any }) =>
-        console.log(endState.finished ? 'bounce finished' : 'bounce cancelled')
-      );
+    imageRef.current.fadeIn(imageFadeDuration);
   };
 
   return (

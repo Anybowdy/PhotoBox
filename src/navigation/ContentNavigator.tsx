@@ -10,10 +10,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import { FontAwesome } from '@expo/vector-icons';
 import { Media } from '../hooks/useMedia';
+import Item from '../models/Items';
 
 export type RootStackParamList = {
   ContentListScreen: undefined;
-  ItemContentScreen: { media: Media };
+  ItemContentScreen: { item: Item };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

@@ -7,12 +7,14 @@ import { RootStackParamList } from '../navigation/ContentNavigator';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import LoadableImage from '../components/LoadableImage';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Item from '../models/Items';
 
 type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'ContentListScreen'
 >;
-type ProfileScreenRouteProp = RouteProp<{ params: { media: Media } }, 'params'>;
+type ProfileScreenRouteProp = RouteProp<{ params: { item: Item } }, 'params'>;
 
 type Props = {
   navigation: ProfileScreenNavigationProp;
@@ -20,6 +22,8 @@ type Props = {
 };
 
 const ItemContentScreen: FC<Props> = ({ navigation, route: { params } }) => {
+  const item = params.item;
+
   return (
     <View
       style={{
@@ -38,14 +42,14 @@ const ItemContentScreen: FC<Props> = ({ navigation, route: { params } }) => {
           alignItems: 'center',
         }}
       >
-        <FontAwesome name='arrow-left' size={30} color='white' />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <FontAwesome name='arrow-left' size={30} color='white' />
+        </TouchableOpacity>
         <View style={{ alignItems: 'flex-end' }}>
           <Text style={{ fontSize: 20, color: 'white', fontWeight: '500' }}>
-            JosephHuang
+            {item.author}
           </Text>
-          <Text style={{ fontSize: 15, color: '#333536' }}>
-            Posté aujourd'hui à 19:52
-          </Text>
+          <Text style={{ fontSize: 15, color: '#333536' }}>{item.timestamp}</Text>
         </View>
       </View>
       <View
@@ -58,7 +62,7 @@ const ItemContentScreen: FC<Props> = ({ navigation, route: { params } }) => {
           overflow: 'hidden',
         }}
       >
-        <LoadableImage uri={params.media.uri} />
+        <LoadableImage uri={item.imageURL} />
       </View>
       <Text></Text>
     </View>

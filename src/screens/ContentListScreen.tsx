@@ -28,11 +28,11 @@ const ContentListScreen: FC<Props> = ({ navigation }) => {
         style={{ backgroundColor: 'white' }}
         keyExtractor={(item) => item.id}
         data={items}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('ItemContentScreen', {
-                media: { type: MediaType.Image, uri: item.imageURL },
+                item: items[index],
               })
             }
             style={styles.itemCell}
