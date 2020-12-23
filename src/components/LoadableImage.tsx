@@ -18,13 +18,13 @@ const LoadableImage: FC<Props> = ({ uri }) => {
   };
 
   return (
-    <View style={{ width: '100%', height: '100%', backgroundColor: '#45bbf3' }}>
+    <>
       {animating && (
         <ActivityIndicator
           size='large'
           animating={true}
           color='black'
-          style={{ width: '100%', height: '100%' }}
+          style={styles.fullScreen}
         />
       )}
 
@@ -33,15 +33,15 @@ const LoadableImage: FC<Props> = ({ uri }) => {
           imageRef.current = image;
         }}
         source={{ uri: uri }}
-        onLoadEnd={() => {
-          onLoadEnd();
-        }}
-        style={{ width: '100%', height: '100%' }}
+        onLoadEnd={onLoadEnd}
+        style={styles.fullScreen}
       />
-    </View>
+    </>
   );
 };
 
 export default LoadableImage;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  fullScreen: { height: '100%', width: '100%' },
+});
