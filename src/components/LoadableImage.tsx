@@ -1,20 +1,23 @@
 import React, { FC, useRef, useState } from 'react';
-import { StyleSheet, Image, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Image, ActivityIndicator } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import { MediaType } from '../models/Media';
+import { Video } from 'expo-av';
 
 interface Props {
   uri: string;
+  mediaType: MediaType;
 }
 
-const LoadableImage: FC<Props> = ({ uri }) => {
+const LoadableImage: FC<Props> = ({ uri, mediaType = MediaType.Image }) => {
   const [animating, setAnimating] = useState(true);
-  const imageRef = useRef<any>(null);
+  const animatedViewRef = useRef<any>(null);
 
-  const imageFadeDuration = 400;
+  const imageFadeDuration = mediaType == MediaType.Image ? 500 : 1500;
 
   const onLoadEnd = () => {
     setAnimating(false);
-    imageRef.current.fadeIn(imageFadeDuration);
+    animatedViewRef.current.fadeIn(imageFadeDuration);
   };
 
   return (
@@ -27,15 +30,25 @@ const LoadableImage: FC<Props> = ({ uri }) => {
           style={styles.fullScreen}
         />
       )}
-
-      <Animatable.Image
-        ref={(image) => {
-          imageRef.current = image;
+      <Animatable.View
+        ref={(view) => {
+          animatedViewRef.current = view;
         }}
-        source={{ uri: uri }}
-        onLoadEnd={onLoadEnd}
-        style={styles.fullScreen}
-      />
+      >
+        {mediaType == MediaType.Image && (
+          <Image source={{ uri: uri }} onLoadEnd={onLoadEnd} style={styles.fullScreen} />
+        )}
+        {mediaType == MediaType.Video && (
+          <Video
+            source={{ uri: uri }}
+            style={styles.fullScreen}
+            shouldPlay
+            isLooping
+            onLoad={onLoadEnd}
+            resizeMode='cover'
+          />
+        )}
+      </Animatable.View>
     </>
   );
 };

@@ -3,7 +3,6 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import useItems from '../hooks/useItems';
 import ThumbImage from '../components/ThumbImage';
 
-import { getReadableFromTimestamp } from '../Utils';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Media, MediaType } from '../models/Media';
 

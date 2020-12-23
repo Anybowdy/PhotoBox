@@ -1,14 +1,11 @@
 import { RouteProp } from '@react-navigation/native';
 import React, { FC } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Media } from '../hooks/useMedia';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/ContentNavigator';
 import { FontAwesome } from '@expo/vector-icons';
 import LoadableImage from '../components/LoadableImage';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Item from '../models/Items';
-import { getReadableFromTimestamp } from '../Utils';
 
 type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -37,8 +34,8 @@ const ItemContentScreen: FC<Props> = ({ navigation, route: { params } }) => {
           <Text style={{ fontSize: 15, color: '#333536' }}>{item.postedAt()}</Text>
         </View>
       </View>
-      <View style={styles.imageView}>
-        <LoadableImage uri={item.imageURL} />
+      <View style={styles.contentView}>
+        <LoadableImage uri={item.imageURL} mediaType={item.mediaType} />
       </View>
     </View>
   );
@@ -60,10 +57,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  imageView: {
+  contentView: {
     width: '90%',
     height: '80%',
-    backgroundColor: 'white',
     marginVertical: '6%',
     borderRadius: 25,
     overflow: 'hidden',
