@@ -25,23 +25,8 @@ const ItemContentScreen: FC<Props> = ({ navigation, route: { params } }) => {
   const item = params.item;
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#45bbf3',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-      }}
-    >
-      <View
-        style={{
-          height: '5%',
-          width: '90%',
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-      >
+    <View style={styles.view}>
+      <View style={styles.topView}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesome name='arrow-left' size={30} color='white' />
         </TouchableOpacity>
@@ -52,23 +37,35 @@ const ItemContentScreen: FC<Props> = ({ navigation, route: { params } }) => {
           <Text style={{ fontSize: 15, color: '#333536' }}>{item.postedAt()}</Text>
         </View>
       </View>
-      <View
-        style={{
-          width: '90%',
-          height: '80%',
-          backgroundColor: 'white',
-          marginVertical: '6%',
-          borderRadius: 25,
-          overflow: 'hidden',
-        }}
-      >
+      <View style={styles.imageView}>
         <LoadableImage uri={item.imageURL} />
       </View>
-      <Text></Text>
     </View>
   );
 };
 
 export default ItemContentScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  view: {
+    flex: 1,
+    backgroundColor: '#45bbf3',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  topView: {
+    height: '5%',
+    width: '90%',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  imageView: {
+    width: '90%',
+    height: '80%',
+    backgroundColor: 'white',
+    marginVertical: '6%',
+    borderRadius: 25,
+    overflow: 'hidden',
+  },
+});

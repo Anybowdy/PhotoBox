@@ -5,7 +5,7 @@ import ThumbImage from '../components/ThumbImage';
 
 import { getReadableFromTimestamp } from '../Utils';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { MediaType } from '../hooks/useMedia';
+import { Media, MediaType } from '../models/Media';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/ContentNavigator';
@@ -37,11 +37,24 @@ const ContentListScreen: FC<Props> = ({ navigation }) => {
             }
             style={styles.itemCell}
           >
-            <ThumbImage
-              thumbSource={item.thumbURL}
-              alternativeSource={item.imageURL}
-              style={{ marginRight: 20 }}
-            />
+            {item.mediaType == MediaType.Image && (
+              <ThumbImage
+                thumbSource={item.thumbURL}
+                alternativeSource={item.imageURL}
+                style={{ marginRight: 20 }}
+              />
+            )}
+            {item.mediaType == MediaType.Video && (
+              <View
+                style={{
+                  marginRight: 20,
+                  width: 40,
+                  height: 40,
+                  backgroundColor: 'purple',
+                  borderRadius: 10,
+                }}
+              />
+            )}
             <View style={{ flexDirection: 'column' }}>
               <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.author}</Text>
               <Text style={styles.timeStampText}>{item.postedAt()}</Text>
