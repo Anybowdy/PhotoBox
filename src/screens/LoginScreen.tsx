@@ -5,8 +5,12 @@ import * as firebase from 'firebase';
 
 const LoginScreen = () => {
   const [creds, setCreds] = useState({
-    email: '',
-    password: '',
+    email:
+      Math.floor(Math.random() * 12345689) +
+      'batar' +
+      Math.floor(Math.random() * 12345689) +
+      '@gmail.com',
+    password: 'qwerty',
     displayName: '',
   });
 
@@ -16,9 +20,7 @@ const LoginScreen = () => {
 
   const onLogin = async () => {
     try {
-      let user = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(creds.email, creds.password);
+      await firebase.auth().createUserWithEmailAndPassword(creds.email, creds.password);
       firebase.auth().currentUser?.updateProfile({
         displayName:
           creds.displayName == '' ? creds.email.split('@')[0] : creds.displayName,
@@ -54,39 +56,15 @@ const LoginScreen = () => {
             Créer ton compte
           </Text>
         </View>
-        <TextInput
-          placeholder='Email'
-          value={creds.email}
-          style={styles.input}
-          onChangeText={(text) => onChangeText('email', text)}
-        />
 
         <TextInput
-          placeholder='Password'
-          value={creds.password}
-          style={styles.input}
-          onChangeText={(text) => onChangeText('password', text)}
-        />
-
-        <TextInput
-          placeholder='Username'
+          placeholder='Pseudo'
           value={creds.displayName}
           style={styles.input}
           onChangeText={(text) => onChangeText('displayName', text)}
         />
 
-        <TouchableOpacity
-          style={{
-            width: '80%',
-            height: 60,
-            backgroundColor: '#45bbf3',
-            borderRadius: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginVertical: 30,
-          }}
-          onPress={onLogin}
-        >
+        <TouchableOpacity style={styles.goButton} onPress={onLogin}>
           <Text style={{ fontSize: 20, fontWeight: '600', color: 'white' }}>Go</Text>
         </TouchableOpacity>
       </View>
@@ -104,5 +82,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginVertical: 10,
+  },
+  goButton: {
+    width: '80%',
+    height: 60,
+    backgroundColor: '#45bbf3',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
   },
 });

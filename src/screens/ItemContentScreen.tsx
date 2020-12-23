@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { Media } from '../hooks/useMedia';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/ContentNavigator';
-import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import LoadableImage from '../components/LoadableImage';
 import { TouchableOpacity } from 'react-native-gesture-handler';

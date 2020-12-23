@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -9,8 +9,8 @@ import ItemContentScreen from '../screens/ItemContentScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import { FontAwesome } from '@expo/vector-icons';
-import { Media } from '../hooks/useMedia';
 import Item from '../models/Items';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export type RootStackParamList = {
   ContentListScreen: undefined;
@@ -35,14 +35,35 @@ const ContentNavigator = () => {
             ),
             headerLeft: () => (
               <TouchableOpacity
-                onPress={() => firebase.auth().signOut()}
+                onPress={() =>
+                  Alert.alert('Choisir un nouveau pseudo', 'Pas dispo', [
+                    { text: 'Valider', onPress: () => {} },
+                    {
+                      text: 'Retour',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                  ])
+                }
                 style={{
                   height: 30,
                   width: 30,
                   marginLeft: 20,
                 }}
               >
-                <FontAwesome name='power-off' size={30} color='black' />
+                <FontAwesome5 name='user-edit' size={24} color='black' />
+              </TouchableOpacity>
+            ),
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => firebase.auth().signOut()}
+                style={{
+                  height: 28,
+                  width: 28,
+                  marginRight: 20,
+                }}
+              >
+                <FontAwesome name='power-off' size={26} color='black' />
               </TouchableOpacity>
             ),
           }}
