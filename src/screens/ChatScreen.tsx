@@ -78,7 +78,7 @@ const ChatScreen = () => {
         <Text
           style={{
             marginBottom: 10,
-            marginRight: 10,
+            marginRight: 15,
             fontWeight: '600',
             fontSize: 17,
             color: 'white',
@@ -86,7 +86,9 @@ const ChatScreen = () => {
         >
           {item.author}
         </Text>
-        <Text style={{ marginBottom: 10, color: 'white' }}>Aujourd’hui à 14:34</Text>
+        <Text style={{ marginBottom: 10, fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>
+          Aujourd’hui à 14:34
+        </Text>
       </View>
       <Text style={{ fontSize: 16, color: 'white' }}>{item.body}</Text>
     </View>
