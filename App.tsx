@@ -43,10 +43,10 @@ export default function App() {
   }
 
   return (
-    <Swiper index={1} showsPagination={false} loop={false} scrollEnabled={scrollEnabled}>
-      <ContentNavigator />
-      <Screen setScrollEnabled={setScrollEnabled} />
-      <ChatScreen />
-    </Swiper>
+    // <Swiper index={1} showsPagination={false} loop={false} scrollEnabled={scrollEnabled}>
+    //   <ContentNavigator />
+    //   <Screen setScrollEnabled={setScrollEnabled} />
+    // </Swiper>
+    <ChatScreen />
   );
 }

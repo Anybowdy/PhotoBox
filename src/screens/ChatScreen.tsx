@@ -1,23 +1,69 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, TextInput, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TextInput,
+  ScrollView,
+  KeyboardAvoidingView,
+  Keyboard,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ScrollableAvoidView from '../components/ScrollableAvoidView';
 
 const ChatScreen = () => {
   const [items, setItems] = useState<any[]>([
-    { id: '1', author: 'Joseph', body: 'Hello how are you' },
+    { id: '1', author: 'Joseph', authorId: 5, body: 'Hello how are you' },
+    { id: '2', author: 'Joseph', authorId: 5, body: 'Je vais bien' },
+    { id: '23', author: 'Joseph', authorId: 5, body: 'et toi' },
+    { id: '29', author: 'AZIZ', authorId: 7, body: 'lolmfti' },
+    { id: '2933', author: 'AZIZ', authorId: 7, body: 'g faim' },
+    { id: '22', author: 'Joseph', authorId: 5, body: 'Je parle solo' },
   ]);
+
+  const transformMessage = () => {
+    const result: Object[] = [];
+    for (var i = 0; i < items.length; i++) {
+      let currentMsg = items[i];
+      for (var j = i + 1; j < items.length; j++) {
+        let comparedMessage = items[j];
+        // same author two msg
+        if (comparedMessage.authorId == currentMsg.authorId) {
+          currentMsg.body = currentMsg.body + '\n' + comparedMessage.body;
+          i++;
+          j++;
+        } else {
+          break;
+        }
+      }
+      result.push(currentMsg);
+    }
+    setItems(result);
+  };
+
+  useEffect(() => {
+    transformMessage();
+  }, []);
 
   const [currentMessage, setCurrentMessage] = useState<string | null>(null);
 
   const sendMessage = () => {
-    console.log(currentMessage);
-    let newItem = {
-      id: Math.floor(Math.random() * 100000),
-      author: 'You',
-      body: currentMessage,
-    };
-    setItems([newItem, ...items]);
+    // console.log(currentMessage);
+    // let newItem = {
+    //   id: Math.floor(Math.random() * 100000).toString(),
+    //   author: 'You',
+    //   authorId: 5,
+    //   body: currentMessage,
+    // };
+    // setItems([newItem, ...items]);
+    console.log(items[0]);
+    const lastMsg = items[0];
+    const it = items;
+    if (lastMsg.authorId == 5) {
+      it.shift();
+      setItems([{ ...lastMsg, body: lastMsg.body + '\n' + currentMessage }, ...it]);
+    }
     setCurrentMessage(null);
   };
 
@@ -45,11 +91,22 @@ const ChatScreen = () => {
     </View>
   );
 
+  const handleScroll = (event: Object) => {
+    let offset = event.nativeEvent.contentOffset.y;
+    //console.log(event.nativeEvent);
+    //console.log(offset);
+    if (offset > 60) {
+      Keyboard.dismiss();
+    }
+  };
+
   return (
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps='always'
-    >
+    // <ScrollView
+    //   contentContainerStyle={{ flexGrow: 1 }}
+    //   keyboardShouldPersistTaps='always'
+    //   keyboardDismissMode='on-drag'
+    // >
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding'>
       <View
         style={{
           flex: 1,
@@ -60,6 +117,9 @@ const ChatScreen = () => {
       >
         <FlatList
           inverted={true}
+          keyboardShouldPersistTaps='handled'
+          onScroll={handleScroll}
+          keyboardDismissMode='none'
           style={{ backgroundColor: 'gray', width: '100%' }}
           keyExtractor={(item) => item.id}
           data={items}
@@ -96,7 +156,7 @@ const ChatScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
