@@ -10,7 +10,7 @@ const useItems = () => {
   var itemsRef = firebase
     .database()
     .ref('items')
-    .limitToLast(20)
+    //.limitToLast(20)
     .orderByChild('timestamp');
 
   useEffect(() => {
