@@ -10,7 +10,6 @@ import {
   Keyboard,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import ScrollableAvoidView from '../components/ScrollableAvoidView';
 
 const ChatScreen = () => {
   const [items, setItems] = useState<any[]>([
@@ -49,20 +48,19 @@ const ChatScreen = () => {
   const [currentMessage, setCurrentMessage] = useState<string | null>(null);
 
   const sendMessage = () => {
-    // console.log(currentMessage);
-    // let newItem = {
-    //   id: Math.floor(Math.random() * 100000).toString(),
-    //   author: 'You',
-    //   authorId: 5,
-    //   body: currentMessage,
-    // };
-    // setItems([newItem, ...items]);
-    console.log(items[0]);
     const lastMsg = items[0];
     const it = items;
     if (lastMsg.authorId == 5) {
       it.shift();
       setItems([{ ...lastMsg, body: lastMsg.body + '\n' + currentMessage }, ...it]);
+    } else {
+      let newItem = {
+        id: Math.floor(Math.random() * 100000).toString(),
+        author: 'You',
+        authorId: 102,
+        body: currentMessage,
+      };
+      setItems([newItem, ...items]);
     }
     setCurrentMessage(null);
   };
@@ -71,7 +69,6 @@ const ChatScreen = () => {
     <View
       style={{
         width: '100%',
-        backgroundColor: 'white',
         paddingVertical: 10,
         paddingHorizontal: 15,
         justifyContent: 'space-evenly',
@@ -79,82 +76,94 @@ const ChatScreen = () => {
     >
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Text
-          style={{ marginBottom: 10, marginRight: 10, fontWeight: '600', fontSize: 17 }}
+          style={{
+            marginBottom: 10,
+            marginRight: 10,
+            fontWeight: '600',
+            fontSize: 17,
+            color: 'white',
+          }}
         >
           {item.author}
         </Text>
-        <Text style={{ marginBottom: 10, color: 'rgba(0,0,0,0.5)' }}>
-          Aujourd’hui à 14:34
-        </Text>
+        <Text style={{ marginBottom: 10, color: 'white' }}>Aujourd’hui à 14:34</Text>
       </View>
-      <Text style={{ fontSize: 16 }}>{item.body}</Text>
+      <Text style={{ fontSize: 16, color: 'white' }}>{item.body}</Text>
+    </View>
+  );
+
+  const InputView = () => (
+    <View
+      style={{
+        width: '100%',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        height: 100,
+        paddingVertical: 10,
+        flexDirection: 'row',
+        backgroundColor: 'rgba(0,4,20,0.75)',
+        borderTopWidth: 1.5,
+        borderTopColor: 'rgba(0,0,0,0.1)',
+      }}
+    >
+      <TextInput
+        placeholder='Ecrire un message...'
+        placeholderTextColor='white'
+        style={{
+          paddingHorizontal: 15,
+          width: '80%',
+          height: 45,
+          borderRadius: 30,
+          backgroundColor: 'rgba(0,0,0,0.1)',
+        }}
+        onSubmitEditing={() => console.log('valider')}
+        value={currentMessage ? currentMessage : ''}
+        onChangeText={(value) => setCurrentMessage(value)}
+      />
+      <TouchableOpacity onPress={sendMessage}>
+        <Text style={{ fontSize: 15, fontWeight: '600', color: '#45bbf3' }}>Send</Text>
+      </TouchableOpacity>
     </View>
   );
 
   const handleScroll = (event: Object) => {
     let offset = event.nativeEvent.contentOffset.y;
-    //console.log(event.nativeEvent);
-    //console.log(offset);
-    if (offset > 60) {
+    if (offset > 45) {
       Keyboard.dismiss();
     }
   };
 
   return (
-    // <ScrollView
-    //   contentContainerStyle={{ flexGrow: 1 }}
-    //   keyboardShouldPersistTaps='always'
-    //   keyboardDismissMode='on-drag'
-    // >
     <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding'>
       <View
         style={{
           flex: 1,
           //backgroundColor: 'yellow',
-          justifyContent: 'center',
           alignItems: 'center',
+          justifyContent: 'flex-end',
         }}
       >
         <FlatList
-          inverted={true}
+          inverted
           keyboardShouldPersistTaps='handled'
           onScroll={handleScroll}
           keyboardDismissMode='none'
-          style={{ backgroundColor: 'gray', width: '100%' }}
+          style={{ backgroundColor: 'rgba(0,4,20,0.75)', width: '100%' }}
           keyExtractor={(item) => item.id}
           data={items}
-          renderItem={({ item, index }) => <MessageCell item={item} />}
-        />
-        <View
-          style={{
-            width: '100%',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            height: 100,
-            paddingVertical: 10,
-            flexDirection: 'row',
+          renderItem={({ item, index }) => {
+            if (index != 0) {
+              return <MessageCell item={item} />;
+            } else {
+              return (
+                <>
+                  <MessageCell item={item} />
+                </>
+              );
+            }
           }}
-        >
-          <TextInput
-            placeholder='Ecrire un message...'
-            style={{
-              paddingHorizontal: 15,
-              width: '80%',
-              height: 45,
-              borderRadius: 30,
-              backgroundColor: 'rgba(0,0,0,0.1)',
-            }}
-            onSubmitEditing={() => console.log('valider')}
-            value={currentMessage ? currentMessage : ''}
-            onChangeText={(value) => setCurrentMessage(value)}
-            //returnKeyType='none'
-          />
-          <TouchableOpacity onPress={sendMessage}>
-            <Text style={{ fontSize: 15, fontWeight: '600', color: '#45bbf3' }}>
-              Send
-            </Text>
-          </TouchableOpacity>
-        </View>
+        />
+        <InputView />
       </View>
     </KeyboardAvoidingView>
   );
