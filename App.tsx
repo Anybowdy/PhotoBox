@@ -7,6 +7,7 @@ import ContentNavigator from './src/navigation/ContentNavigator';
 
 import Screen from './src/screens/Screen';
 import LoginScreen from './src/screens/LoginScreen';
+import ChatScreen from './src/screens/ChatScreen';
 
 import { initializeFirebase } from './FirebaseConfig';
 
@@ -45,6 +46,7 @@ export default function App() {
     <Swiper index={1} showsPagination={false} loop={false} scrollEnabled={scrollEnabled}>
       <ContentNavigator />
       <Screen setScrollEnabled={setScrollEnabled} />
+      <ChatScreen />
     </Swiper>
   );
 }
