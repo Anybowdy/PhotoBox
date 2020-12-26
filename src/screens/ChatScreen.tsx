@@ -1,3 +1,4 @@
+import * as firebase from 'firebase';
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
@@ -5,11 +6,12 @@ import {
   View,
   FlatList,
   TextInput,
-  ScrollView,
   KeyboardAvoidingView,
   Keyboard,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import { uuidv4 } from '../Utils';
 
 const ChatScreen = () => {
   const [items, setItems] = useState<any[]>([
@@ -21,6 +23,8 @@ const ChatScreen = () => {
     { id: '22', author: 'Joseph', authorId: 5, body: 'Je parle solo' },
   ]);
 
+  const [currentMessage, setCurrentMessage] = useState('');
+
   const transformMessage = () => {
     const result: Object[] = [];
     for (var i = 0; i < items.length; i++) {
@@ -30,8 +34,7 @@ const ChatScreen = () => {
         // same author two msg
         if (comparedMessage.authorId == currentMsg.authorId) {
           currentMsg.body = currentMsg.body + '\n' + comparedMessage.body;
-          i++;
-          j++;
+          i++, j++;
         } else {
           break;
         }
@@ -42,10 +45,8 @@ const ChatScreen = () => {
   };
 
   useEffect(() => {
-    transformMessage();
+    //transformMessage();
   }, []);
-
-  const [currentMessage, setCurrentMessage] = useState<string | null>(null);
 
   const sendMessage = () => {
     const lastMsg = items[0];
@@ -55,14 +56,26 @@ const ChatScreen = () => {
       setItems([{ ...lastMsg, body: lastMsg.body + '\n' + currentMessage }, ...it]);
     } else {
       let newItem = {
-        id: Math.floor(Math.random() * 100000).toString(),
+        id: uuidv4(),
         author: 'You',
         authorId: 102,
         body: currentMessage,
       };
       setItems([newItem, ...items]);
     }
-    setCurrentMessage(null);
+  };
+
+  const sendMessageToFirebase = async () => {
+    let newItem = {
+      id: uuidv4(),
+      author: 'You',
+      authorId: 102,
+      body: currentMessage,
+    };
+    let messageRef = firebase.database().ref('messages/').push();
+    messageRef.set(newItem);
+
+    setCurrentMessage('');
   };
 
   var MessageCell = ({ item }: { item: any }) => (
@@ -94,40 +107,6 @@ const ChatScreen = () => {
     </View>
   );
 
-  const InputView = () => (
-    <View
-      style={{
-        width: '100%',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        height: 100,
-        paddingVertical: 10,
-        flexDirection: 'row',
-        backgroundColor: 'rgba(0,4,20,0.75)',
-        borderTopWidth: 1.5,
-        borderTopColor: 'rgba(0,0,0,0.1)',
-      }}
-    >
-      <TextInput
-        placeholder='Ecrire un message...'
-        placeholderTextColor='white'
-        style={{
-          paddingHorizontal: 15,
-          width: '80%',
-          height: 45,
-          borderRadius: 30,
-          backgroundColor: 'rgba(0,0,0,0.1)',
-        }}
-        onSubmitEditing={() => console.log('valider')}
-        value={currentMessage ? currentMessage : ''}
-        onChangeText={(value) => setCurrentMessage(value)}
-      />
-      <TouchableOpacity onPress={sendMessage}>
-        <Text style={{ fontSize: 15, fontWeight: '600', color: '#45bbf3' }}>Send</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   const handleScroll = (event: Object) => {
     let offset = event.nativeEvent.contentOffset.y;
     if (offset > 45) {
@@ -153,19 +132,43 @@ const ChatScreen = () => {
           style={{ backgroundColor: 'rgba(0,4,20,0.75)', width: '100%' }}
           keyExtractor={(item) => item.id}
           data={items}
-          renderItem={({ item, index }) => {
-            if (index != 0) {
-              return <MessageCell item={item} />;
-            } else {
-              return (
-                <>
-                  <MessageCell item={item} />
-                </>
-              );
-            }
-          }}
+          renderItem={({ item }) => <MessageCell item={item} />}
         />
-        <InputView />
+        <View
+          style={{
+            width: '100%',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            height: 100,
+            paddingVertical: 10,
+            flexDirection: 'row',
+            backgroundColor: 'rgba(0,4,20,0.75)',
+            borderTopWidth: 1.5,
+            borderTopColor: 'rgba(0,0,0,0.1)',
+          }}
+        >
+          <TextInput
+            placeholder='Ecrire un message...'
+            placeholderTextColor='white'
+            style={{
+              paddingHorizontal: 15,
+              width: '80%',
+              height: 45,
+              borderRadius: 30,
+              backgroundColor: 'rgba(0,0,0,0.1)',
+            }}
+            onSubmitEditing={() => console.log('valider')}
+            value={currentMessage}
+            onChangeText={(value) => {
+              setCurrentMessage(value);
+            }}
+          />
+          <TouchableOpacity onPress={sendMessageToFirebase}>
+            <Text style={{ fontSize: 15, fontWeight: '600', color: '#45bbf3' }}>
+              Send
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
