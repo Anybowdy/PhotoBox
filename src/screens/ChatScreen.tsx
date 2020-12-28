@@ -17,9 +17,7 @@ import useChat from '../hooks/useChat';
 
 const ChatScreen = () => {
   const { messages } = useChat();
-
   const [currentMessage, setCurrentMessage] = useState('');
-
   const [loading, setLoading] = useState(false);
 
   const sendMessageToFirebase = async () => {
@@ -33,13 +31,6 @@ const ChatScreen = () => {
     };
     let messageRef = firebase.database().ref('messages/').push();
     messageRef.set(newItem);
-    //setItems([newItem, ...items]);
-    // const lastMsg = items[0];
-    // const it = items;
-    // if (lastMsg.authorId == 5) {
-    //   it.shift();
-    //   setItems([{ ...lastMsg, body: lastMsg.body + '\n' + currentMessage }, ...it]);
-    // }
     setCurrentMessage('');
     setLoading(false);
   };
